@@ -7,8 +7,8 @@ import pymysql
 import pymysql.cursors
 import re
 
-dbConn = pymysql.connect(host='middlewaredbinstance.cie0rnnmypb0.us-east-1.rds.amazonaws.com', 
-	port=3306, user='hyxjames', password='Hyx123987', db='trData')
+dbConn = pymysql.connect(host='middlewaredbinstance.****.us-east-1.rds.amazonaws.com', 
+	port=0000, user='****', password='******', db='trData')
 cursor = dbConn.cursor()
 
 
