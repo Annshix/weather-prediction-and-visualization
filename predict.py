@@ -16,3 +16,4 @@ class Predict:
 
     def predict(self):
         output = self.model.predict(self.input)
+        return output

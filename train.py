@@ -11,14 +11,10 @@ from math import sqrt
 
 
 class Train:
-    def __init__(self, f):
+    def __init__(self, f, maps):
         self.data = pandas.DataFrame(read_csv(f, header=0))
         self.scaler = None
-        self.map_condition = {'Unknown': 0, 'Clear': 1, 'Scattered Clouds': 2, 'Mist': 3, 'Haze': 4, 'Shallow Fog': 5,
-                              'Patches of Fog': 6, 'Fog': 7, 'Partly Cloudy': 8, 'Mostly Cloudy': 9, 'Overcast': 10,
-                              'Funnel Cloud': 11, 'Light Drizzle': 12, 'Drizzle': 13, 'Light Rain': 14, 'Rain': 15,
-                              'Heavy Rain': 16, 'Light Thunderstorms and Rain': 17, 'Thunderstorms and Rain': 18,
-                              'Thunderstorm': 19, 'Smoke': 20}
+        self.map_condition = maps
 
     def series2supervise(self, data, n_in=24, n_out=6, is_drop=True):
         data = pandas.DataFrame(data)
@@ -106,5 +102,5 @@ class Train:
         print(rmse)
         return model
 
-engine = Train('data.csv')
-engine.model()
+# engine = Train('data.csv')
+# engine.model()
