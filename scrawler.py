@@ -6,8 +6,8 @@ import pymysql
 import pymysql.cursors
 import re
 
-dbConn = pymysql.connect(host='middlewaredbinstance.****.us-east-1.rds.amazonaws.com',
-                         port=0000, user='****', password='******', db='trData')
+dbConn = pymysql.connect(host='middlewaredbinstance.cie0rnnmypb0.us-east-1.rds.amazonaws.com',
+                         port=3306, user='hyxjames', password='Hyx123987', db='trData')
 cursor = dbConn.cursor()
 
 url = "https://www.wunderground.com/history/airport/KSNA/"
@@ -20,13 +20,15 @@ start_date = date.today()
 
 num = 3000
 res = []
-for i in range(140, num + 1):
-    create_table = "CREATE TABLE IF NOT EXISTS " + 'table_' + str(
-        i) + "(hour int NOT NULL AUTO_INCREMENT, temperature decimal(5,1) NOT NULL, humidity int NOT NULL,pressure decimal(5,2) NOT NULL, PRIMARY KEY (hour))ENGINE=Innodb DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1;"
+for i in range(1865, num + 1):
+    create_table = "CREATE TABLE IF NOT EXISTS " + 't_' + str(
+        i) + "(hour int NOT NULL AUTO_INCREMENT, temperature decimal(5,1) NOT NULL, " \
+             "humidity int NOT NULL,pressure decimal(5,2) NOT NULL, cond varchar(30) NOT NULL, " \
+             "PRIMARY KEY (hour))ENGINE=Innodb DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1;"
     cursor.execute(create_table)
     dbConn.commit()
 
-    delta = timedelta(days=i)
+    delta = timedelta(days=num-i)
     time = start_date - delta
     time = time.strftime("20%y/%m/%d")
     tmp = '/'.join([url, time, 'DailyHistory.html?' + req])
@@ -57,14 +59,16 @@ for i in range(140, num + 1):
     for j in range(24):  # 24 hours
         hour = j + 1
         try:
-            temp = float(re.findall("\d+\.\d+", data[j][2])[0])
+            temp = float(re.findall("\d+\.\d+", data[j][1])[0])
             humidity = int(re.findall("\d+", data[j][3])[0])
             pressure = float(re.findall("\d+\.\d+", data[j][4])[0])
-            sql = "INSERT into " + 'table_' + str(i) + "(hour, temperature, humidity, pressure) VALUES (%s, %s, %s, %s)"
-            cursor.execute(sql, (hour, temp, humidity, pressure))
+            condition = str(data[j][-1])
+            sql = "INSERT into " + 't_' + str(i) + "(hour, temperature, humidity, pressure, cond) " \
+                                                       "VALUES (%s, %s, %s, %s, %s)"
+            cursor.execute(sql, (hour, temp, humidity, pressure, condition))
             dbConn.commit()
         except:
-            cursor.execute("DROP TABLE table_" + str(i))
+            cursor.execute("DROP TABLE t_" + str(i))
             print(str(i) + "table dropped")
             break
 
