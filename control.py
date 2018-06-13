@@ -1,6 +1,50 @@
 import time
-import train
-import predict
+import datetime
+from datetime import date
+import  pymysql
+import  pymysql.cursors
+import pandas as pd
+import re
+
+def getLast24HoursData():
+  inputList = list()
+  t=date.today()
+  today = t.strftime("%Y%m%d")
+  oneday=datetime.timedelta(days=1) 
+  yesterday=t-oneday
+  yesterday = yesterday.strftime("%Y%m%d")
+  yesterdayTable = 'table_'+yesterday
+  todayTable = 'table_'+today
+  print(todayTable)
+  dbConn = pymysql.connect(host='middlewaredbinstance.cie0rnnmypb0.us-east-1.rds.amazonaws.com', 
+        port=3306, user='hyxjames', password='Hyx123987', db='vaData')
+  cursor = dbConn.cursor()
+  try:
+    sql="SELECT * from "+yesterdayTable
+    cursor.execute(sql)
+    result=cursor.fetchall()
+    for data in result:
+      inputList.append(yesterday)
+      inputList.append(data[0])
+      inputList.append(data[1])
+      inputList.append(data[2])
+      inputList.append(30) #pressure
+      inputList.append(0) #wind
+    sql = "SELECT * from "+todayTable
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    for data in result:
+      inputList.append(today)
+      inputList.append(data[0])
+      inputList.append(data[1])
+      inputList.append(data[2])
+      inputList.append(30) #pressure
+      inputList.append(0) #wind
+      inputList = inputList[len(inputList)-6*24:len(inputList)]
+  except:
+    print("read data fails")
+  dbConn.close()
+  return inputList
 
 date = time.strftime("%d", time.localtime())
 hour = time.strftime("%H", time.localtime())
