@@ -20,7 +20,7 @@ start_date = date.today()
 
 num = 3000
 res = []
-for i in range(1865, num + 1):
+for i in range(0, num + 1):
     create_table = "CREATE TABLE IF NOT EXISTS " + 't_' + str(
         i) + "(hour int NOT NULL AUTO_INCREMENT, temperature decimal(5,1) NOT NULL, " \
              "humidity int NOT NULL,pressure decimal(5,2) NOT NULL, cond varchar(30) NOT NULL, " \

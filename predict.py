@@ -1,19 +1,18 @@
-import pandas
-from pandas import read_csv
-from pandas import concat
 from numpy import concatenate
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_squared_error
-from keras import Sequential
-from keras.layers import LSTM
-from keras.layers import Dense
-from math import sqrt
+import numpy as np
+
 
 class Predict:
-    def __init__(self, model, input):
+    def __init__(self, model, input, scaler):
         self.model = model
-        self.input = input
+        self.input = np.array([input])
+        self.scaler = scaler
 
     def predict(self):
-        output = self.model.predict(self.input)
-        return output
+        x = self.input.reshape(self.input.shape[0], 1, self.input.shape[1])
+        output = self.model.predict(x)
+        x = x.reshape(x.shape[0], x.shape[2])
+        output = concatenate((x, output), axis=1)
+        output = self.scaler.inverse_transform(output)
+
+        return output[0, -6:]
