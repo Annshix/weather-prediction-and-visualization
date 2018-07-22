@@ -1,4 +1,10 @@
 # weather-prediction-and-visualization
-A middleware for weather condition prediction using LSTM;
+A middleware for weather condition prediction using LSTM, which includes:
 
-Can be embedded on the [SCALE](https://scale.ics.uci.edu/) system. 
+Scraw historical data from WeatherUnderground;
+
+Running prediction programs;
+
+Send data to [SCALE](https://scale.ics.uci.edu/).
+
+Embedded on the [SCALE](https://scale.ics.uci.edu/) system. 
