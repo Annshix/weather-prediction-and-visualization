@@ -1,2 +1,3 @@
 # weather-prediction-and-visualization
-An App for weather data visualization and visualization using ML algorithms
+A middleware for weather condition prediction using LSTM;
+Can be embedded on the [SCALE](https://scale.ics.uci.edu/) system. 
